@@ -87,14 +87,14 @@ substitutions:
   # Home Assistant Voice PE's timer_finished.flac, vendored deliberately: the
   # original lives on that project's `dev` branch, where it can move or change
   # and break a build here without anything changing on our side.
-  timer_finished_sound_file: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va/raw/main/base/sounds/timer_finished.flac
+  timer_finished_sound_file: https://github.com/sswart/esphome-esp32-s3-box-3-va/raw/main/base/sounds/timer_finished.flac
 
   # Played when the wake word fires, if the "Wake sound" switch is on. 180 ms on
   # purpose: the microphone and speaker share one I2S bus on this board, so the
   # beep has to finish BEFORE listening starts. Home Assistant Voice PE's own
   # wake sound is 0.95 s, which would put nearly a second between the wake word
   # and the assistant hearing anything.
-  wake_sound_file: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va/raw/main/base/sounds/wake.wav
+  wake_sound_file: https://github.com/sswart/esphome-esp32-s3-box-3-va/raw/main/base/sounds/wake.wav
 
   # Input gain for the wake word only (1-64). See the micro_wake_word block for
   # why this exists and why it is not 1.

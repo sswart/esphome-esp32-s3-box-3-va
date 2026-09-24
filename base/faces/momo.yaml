@@ -23,14 +23,14 @@ esphome:
 # name one assistant and get everything it needs - see the repository README.
 packages:
   face_engine:
-    url: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va
+    url: https://github.com/sswart/esphome-esp32-s3-box-3-va
     ref: main
     files:
       - base/screens/face.yaml
     refresh: 0s
 
 substitutions:
-  face_background_file: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va/raw/main/base/faces/momo.png
+  face_background_file: https://github.com/sswart/esphome-esp32-s3-box-3-va/raw/main/base/faces/momo.png
 
   face_color: '0xFFC24D'
   face_mouth_color: '0xFFC24D'

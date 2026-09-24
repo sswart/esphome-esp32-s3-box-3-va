@@ -173,17 +173,17 @@ esphome:
 image:
   - platform: file
     id: face_bg_2
-    file: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va/raw/main/base/faces/${{pick_2}}.png
+    file: https://github.com/sswart/esphome-esp32-s3-box-3-va/raw/main/base/faces/${{pick_2}}.png
     resize: 320x240
     type: RGB565
   - platform: file
     id: face_bg_3
-    file: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va/raw/main/base/faces/${{pick_3}}.png
+    file: https://github.com/sswart/esphome-esp32-s3-box-3-va/raw/main/base/faces/${{pick_3}}.png
     resize: 320x240
     type: RGB565
   - platform: file
     id: face_bg_4
-    file: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va/raw/main/base/faces/${{pick_4}}.png
+    file: https://github.com/sswart/esphome-esp32-s3-box-3-va/raw/main/base/faces/${{pick_4}}.png
     resize: 320x240
     type: RGB565
 

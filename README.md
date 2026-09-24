@@ -329,13 +329,13 @@ the line to leave it out. ESPHome merges each package's `lvgl:` block into one U
 
 | Screen | What it adds |
 |---|---|
-| `home.yaml` | Clock, date, room temperature/humidity and outdoor temperature, in place of the core's plain text idle screen. Needs `idle_page: page_home` and your HA entity ids; day and month names are substitutions, so it localises without touching the core. |
+| `home.yaml` | Clock, date, room temperature/CO2 and outdoor temperature, in place of the core's plain text idle screen. Needs `idle_page: page_home` and your HA entity ids; day and month names are substitutions, so it localises without touching the core. |
 | `face.yaml` | An animated assistant: a static character image with eyes, pupils and a mouth drawn on top as LVGL rectangles, reshaped per phase - blinking and glancing about while idle, wide-eyed listening, pupils darting while thinking, mouth moving while replying, red and shaking when a timer goes off. Claims the active phases and leaves idle alone, so it composes with `home.yaml`. Only the small widgets ever redraw, never the background. |
 | `settings.yaml` | The device's own switches as tap tiles - microphone mute, wake sound and the screen, plus the `TTS output` toggle and a volume slider. Reached one swipe down from home (`idle_page_above: page_settings`). The on and off states differ in shape, not only colour, so the screen reads at a glance; the icons are the handful of Material Design glyphs actually used, downloaded at compile time. |
 | `media.yaml` | What is playing on any Home Assistant media player - title, artist, a progress bar and previous / play-pause / next as tap buttons. A **carousel screen**: one swipe left or right from home. It follows `external_media_player_id` on its own, so a room with one speaker names it once; set `media_entity` only when the screen should watch something else - a TV, another room, or the box's own player, `media_player.<name>_<friendly_name>` slugified. Where Music Assistant and the Cast integration both publish a speaker, pick the Music Assistant one: the raw Cast entity offers no previous/next and no track length. The bar advances locally between Home Assistant's occasional position updates, and only while the page is on screen. |
 | `weather.yaml` | Current conditions big - icon, temperature, humidity and wind - over a forecast row of up to seven days, each with its own icon and high/low. A **carousel screen**: one swipe sideways from home. Current conditions come straight from a `weather` entity; the forecast needs a small helper in Home Assistant, because since 2024.4 a forecast lives only in a service response and a device cannot read one. The screen draws a column per day it is given and centres them, so a five-day integration and a ten-day one both look deliberate. |
 | `climate.yaml` | A thermostat: the target temperature large, the room's own below it, a flame that lights only while the device is actually heating, two arrows and a row of mode buttons. A **carousel screen**: one swipe sideways from home. Needs nothing in Home Assistant - the step, the limits and the list of modes are all attributes, so the row has three buttons on a TRV and six on an air conditioner without being told. Taps move the number at once and call Home Assistant after, because a thermostat is tapped in bursts. |
-| `home-styles.yaml` | A live **"Home style"** selector in Home Assistant - 40 looks for the home screen (fonts, colours, gradient backgrounds, layouts, a temperature/humidity dashboard, and a big-outdoor-reading "Station" family in eight palettes) switched at runtime with no rebuild, the choice restored across a reboot. Rides on `home.yaml` and touches only the home screen. See [Home styles](#home-styles) below. |
+| `home-styles.yaml` | A live **"Home style"** selector in Home Assistant - 40 looks for the home screen (fonts, colours, gradient backgrounds, layouts, a temperature/CO2 dashboard, and a big-outdoor-reading "Station" family in eight palettes) switched at runtime with no rebuild, the choice restored across a reboot. Rides on `home.yaml` and touches only the home screen. See [Home styles](#home-styles) below. |
 | `show-screen.yaml` | Four Home Assistant buttons - **"Show home/weather/thermostat/media screen"** - that jump the display to whichever one is pressed, meant for Assist ("Alexa, pokaż pogodę"). Needs `home.yaml`, `weather.yaml`, `climate.yaml` and `media.yaml` all installed, since it has to name each one's page directly. See [Voice control](#voice-control) below. |
 | `canvas.yaml` | Lets Assist **draw whatever it wants on the screen** - "Alexa, draw a sun" - rectangles, circles, text and Material Design icons, on a blank page it switches to on its own. Only reachable from Home Assistant: never a swipe, never a button on the Box. Needs nothing else. See [Voice control](#voice-control) below. |
 
@@ -417,7 +417,7 @@ reboot. Only the home screen is restyled; nothing else moves.
 ```
 
 The 40 styles, at the device's native 320x240 - layouts (Default, Big, Terminal,
-Stack, **Dashboard** with temperature/humidity icons, RightCol, Corner, **Station**
+Stack, **Dashboard** with temperature/CO2 icons, RightCol, Corner, **Station**
 with a big outdoor reading over a small indoor strip), fonts and palettes,
 vertical and horizontal gradient backgrounds, and light themes:
 
@@ -477,7 +477,7 @@ looks the same bar minor anti-aliasing.</sub>
 
 Eight more: the **Station** family, same three sensors as the small row under
 Dashboard's clock, drawn bigger and split differently - a big outdoor reading
-up top, a small indoor temperature/humidity strip below a divider. Each
+up top, a small indoor temperature/CO2 strip below a divider. Each
 borrows its palette from the matching style above it - `Station Neon` is
 `Neon`'s cyan and magenta, `Station Paper` is `Paper`'s cream and ink - except
 `Station Aura`, which matches the `aura` character instead: its divider

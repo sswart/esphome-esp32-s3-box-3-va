@@ -1,5 +1,5 @@
 ###############################################################################
-# Home screen: clock, date, room climate, outdoor temperature.
+# Home screen: clock, date, room temperature and CO2, outdoor temperature.
 #
 # An OPTIONAL package. Add it to your thin config's `files:` list and point
 # `idle_page` at it:
@@ -31,7 +31,7 @@ substitutions:
   # Home Assistant entities. Wrong or missing ones are not an error - ESPHome
   # subscribes anyway and the label stays "--" until something answers.
   room_temp_entity: sensor.room_temperature
-  room_hum_entity: sensor.room_humidity
+  room_co2_entity: sensor.room_co2   # in ppm
   outdoor_temp_entity: sensor.outdoor_temperature
 
   # Every string below is English by default and overridable by a language
@@ -77,8 +77,8 @@ sensor:
     on_value:
       - script.execute: update_home_climate
   - platform: homeassistant
-    id: room_hum
-    entity_id: ${room_hum_entity}
+    id: room_co2
+    entity_id: ${room_co2_entity}
     internal: true
     on_value:
       - script.execute: update_home_climate
@@ -174,11 +174,11 @@ script:
           char buf[48];
           const std::string temp = std::isnan(id(room_temp).state)
               ? "--" : str_snprintf("%.1f", 8, id(room_temp).state);
-          if (std::isnan(id(room_hum).state)) {
+          if (std::isnan(id(room_co2).state)) {
             snprintf(buf, sizeof(buf), "%s  %s°", "${home_indoor_label}", temp.c_str());
           } else {
-            snprintf(buf, sizeof(buf), "%s  %s°  %.0f%%",
-                     "${home_indoor_label}", temp.c_str(), id(room_hum).state);
+            snprintf(buf, sizeof(buf), "%s  %s°  %.0f ppm",
+                     "${home_indoor_label}", temp.c_str(), id(room_co2).state);
           }
           id(home_indoor_text) = buf;
 

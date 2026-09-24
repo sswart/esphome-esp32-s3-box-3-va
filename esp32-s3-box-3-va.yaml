@@ -58,7 +58,7 @@ substitutions:
   # Home screen entities. Wrong or missing ones are not an error - the label just
   # stays "--" until something answers.
   room_temp_entity: sensor.room_temperature
-  room_hum_entity: sensor.room_humidity
+  room_co2_entity: sensor.room_co2   # in ppm
   outdoor_temp_entity: sensor.outdoor_temperature
 
   # --- Carousel screens, all optional ------------------------------------------

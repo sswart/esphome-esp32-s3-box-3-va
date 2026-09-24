@@ -15,7 +15,7 @@
 #
 # A style is: PALETTE + FONT + BACKGROUND + LAYOUT. Most styles keep the default
 # layout and differ by paint; Big / Terminal / Stack rearrange it; Dashboard adds
-# temperature / humidity / outdoor icons with values. The Station family (eight
+# temperature / CO2 / outdoor icons with values. The Station family (eight
 # styles, one per finished palette below) is the same three sensors again, drawn
 # as a big outdoor reading over a small indoor strip instead of Dashboard's three
 # equal tiles - see the layout == 7 branch below. The small text keeps the main
@@ -27,7 +27,7 @@ substitutions:
   # them the same way it overrides home_indoor_label/home_outdoor_label.
   station_outdoor_label: "Outside"
   station_indoor_label: "Inside"
-  station_humidity_label: "Humidity"
+  station_co2_label: "CO2 ppm"
 
 font:
   # Clock fonts - digits and a colon only. `font_clock` (Default) is in home.yaml.
@@ -100,7 +100,7 @@ font:
     size: 62
     glyphs: "0123456789:-"
   # Material Design Icons for the Dashboard style. Just the three glyphs it uses -
-  # thermometer, water-percent and a cloud - verified against the v7.4.47 webfont.
+  # thermometer, molecule-co2 and a cloud - verified against the v7.4.47 webfont.
   # The Station family reuses the very same three widgets, so no second icon
   # font is needed for it.
   - id: font_home_mdi
@@ -109,7 +109,7 @@ font:
     bpp: 4
     glyphs:
       - "\U000F050F"   # thermometer
-      - "\U000F058E"   # water-percent (humidity)
+      - "\U000F07E4"   # molecule-co2
       - "\U000F0590"   # weather-cloudy (outdoor)
   # The same cloud, bigger, for Station's hero - w_io's font is switched
   # between this and font_home_mdi depending on style, same trick as the
@@ -177,7 +177,7 @@ globals:
     type: lv_obj_t*
     restore_value: false
     initial_value: "nullptr"
-  - id: station_hum_lbl
+  - id: station_co2_lbl
     type: lv_obj_t*
     restore_value: false
     initial_value: "nullptr"
@@ -287,8 +287,8 @@ script:
           char b[16];
           std::string vt = std::isnan(id(room_temp).state) ? "--"
               : (snprintf(b, sizeof(b), "%.1f°", id(room_temp).state), std::string(b));
-          std::string vh = std::isnan(id(room_hum).state) ? "--"
-              : (snprintf(b, sizeof(b), "%.0f%%", id(room_hum).state), std::string(b));
+          std::string vh = std::isnan(id(room_co2).state) ? "--"
+              : (snprintf(b, sizeof(b), "%.0f", id(room_co2).state), std::string(b));
           std::string vo = std::isnan(id(outdoor_temp).state) ? "--"
               : (snprintf(b, sizeof(b), "%.1f°", id(outdoor_temp).state), std::string(b));
           lv_label_set_text(id(w_vt), vt.c_str());
@@ -379,7 +379,7 @@ script:
           // whichever of the two uses them.
           lv_obj_t *dashw[6] = {id(w_it),id(w_ih),id(w_io),id(w_vt),id(w_vh),id(w_vo)};
           for (int i=0;i<6;i++) hide(dashw[i]);
-          lv_obj_t *stw[13] = {id(station_out_lbl),id(station_in_lbl),id(station_hum_lbl),id(station_div),
+          lv_obj_t *stw[13] = {id(station_out_lbl),id(station_in_lbl),id(station_co2_lbl),id(station_div),
                                id(station_bar_0),id(station_bar_1),id(station_bar_2),id(station_bar_3),
                                id(station_bar_4),id(station_bar_5),id(station_bar_6),id(station_bar_7),id(station_bar_8)};
           for (int i=0;i<13;i++) hide(stw[i]);
@@ -480,7 +480,7 @@ script:
             static const int ICON_X[2] = {34, 184};
             lv_obj_t *sic[2] = {id(w_it), id(w_ih)};
             lv_obj_t *sval[2] = {id(w_vt), id(w_vh)};
-            lv_obj_t *slbl[2] = {id(station_in_lbl), id(station_hum_lbl)};
+            lv_obj_t *slbl[2] = {id(station_in_lbl), id(station_co2_lbl)};
             for (int i = 0; i < 2; i++) {
               if (sic[i]) {
                 show(sic[i]);
@@ -577,7 +577,7 @@ esphome:
             auto val = [&](){ lv_obj_t *o = lv_label_create(p);
               lv_obj_set_style_text_font(o, id(font_home_small)->get_lv_font(), 0);
               lv_obj_add_flag(o, LV_OBJ_FLAG_HIDDEN); return o; };
-            id(w_it) = ico("\U000F050F"); id(w_ih) = ico("\U000F058E"); id(w_io) = ico("\U000F0590");
+            id(w_it) = ico("\U000F050F"); id(w_ih) = ico("\U000F07E4"); id(w_io) = ico("\U000F0590");
             id(w_vt) = val(); id(w_vh) = val(); id(w_vo) = val();
 
             auto cap = [&](const char *t){ lv_obj_t *o = lv_label_create(p);
@@ -585,7 +585,7 @@ esphome:
               lv_label_set_text(o, t); lv_obj_add_flag(o, LV_OBJ_FLAG_HIDDEN); return o; };
             id(station_out_lbl) = cap("${station_outdoor_label}");
             id(station_in_lbl)  = cap("${station_indoor_label}");
-            id(station_hum_lbl) = cap("${station_humidity_label}");
+            id(station_co2_lbl) = cap("${station_co2_label}");
 
             lv_obj_t *div = lv_obj_create(p);
             lv_obj_set_size(div, 272, 1);

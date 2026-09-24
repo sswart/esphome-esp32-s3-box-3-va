@@ -86,7 +86,7 @@ substitutions:
 
 packages:
   core:
-    url: https://github.com/MichalZaniewicz/esphome-esp32-s3-box-3-va
+    url: https://github.com/sswart/esphome-esp32-s3-box-3-va
     ref: main
     files:
       - base/core.yaml
